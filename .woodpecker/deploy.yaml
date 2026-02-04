@@ -2,6 +2,10 @@
 steps:
   - name: tofu-plan
     image: alpine:latest  # or debian, ubuntu, etc.
+    backend_options:
+      docker:
+        extra_hosts:
+          - "host:host-gateway"
     commands:
       # Install OpenTofu
       - apk add --no-cache curl cosign gpg  # for Alpine
