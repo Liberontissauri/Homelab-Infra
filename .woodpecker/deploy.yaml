@@ -4,7 +4,7 @@ steps:
     image: alpine:latest  # or debian, ubuntu, etc.
     commands:
       # Install OpenTofu
-      - apk add --no-cache curl  # for Alpine
+      - apk add --no-cache curl cosign gpg  # for Alpine
       - |
         curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
         chmod +x install-opentofu.sh
