@@ -33,7 +33,16 @@ steps:
         from_secret: TF_VAR_github_client_secret
       TF_VAR_woodpecker_admin_user:
         from_secret: TF_VAR_woodpecker_admin_user
+      SSH_KEY:
+        from_secret: ssh_key
     commands:
+      # Setup SSH key
+      - mkdir -p ~/.ssh
+      - echo "$SSH_KEY" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - apk add --no-cache openssh-client
+      - ssh-keyscan -H $TF_VAR_homelab_ip >> ~/.ssh/known_hosts
+      - ssh-keyscan -H $TF_VAR_vps_ip >> ~/.ssh/known_hosts
       # Install OpenTofu
       - apk add --no-cache curl cosign gpg  # for Alpine
       - |
