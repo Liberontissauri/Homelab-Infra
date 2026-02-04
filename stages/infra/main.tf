@@ -122,6 +122,20 @@ module "rathole" {
     cloudflare_zone_id    = var.cloudflare_zone_id
 }
 
+module "registry" {
+    source = "../../modules/registry"
+    providers = {
+        docker = docker
+        cloudflare = cloudflare
+    }
+    domain_base           = var.domain_base
+    cloudflare_tunnel_id = cloudflare_zero_trust_tunnel_cloudflared.homelab_tunnel.id
+    cloudflare_zone_id    = var.cloudflare_zone_id
+    docker_host = "root@${var.homelab_ip}"
+    network_name = docker_network.homelab_network.name
+    auth_password = var.docker_registry_admin_password
+}
+
 # --- Tunnel Routing Configuration ---
 # Centralized configuration for all services on the tunnel
 
@@ -135,6 +149,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab_routing" {
         for rule in [
           module.affine.ingress_rule,
           module.booklore.ingress_rule,
+          module.registry.ingress_rule
         ] : {
           hostname = rule.hostname
           service  = rule.service

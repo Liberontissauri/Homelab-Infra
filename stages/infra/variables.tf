@@ -30,3 +30,6 @@ variable "domain_base" {
   type = string
 }
 
+variable "docker_registry_admin_password" {
+  type = string
+}
