@@ -33,3 +33,25 @@ variable "domain_base" {
 variable "docker_registry_admin_password" {
   type = string
 }
+
+variable "woodpecker_admin_user" {
+  type        = string
+  description = "Woodpecker admin username"
+}
+
+variable "woodpecker_agent_secret" {
+  type        = string
+  description = "Shared secret for agent authentication"
+  sensitive   = true
+}
+
+variable "github_client_id" {
+  type        = string
+  description = "GitHub OAuth App client ID for Woodpecker"
+}
+
+variable "github_client_secret" {
+  type        = string
+  description = "GitHub OAuth App client secret for Woodpecker"
+  sensitive   = true
+}
