@@ -39,8 +39,8 @@ steps:
   - name: tofu-plan
     <<: *common-config
     commands:
-      - sh .woodpecker/scripts/setup-ssh.sh
-      - sh .woodpecker/scripts/install-tofu.sh
+      - sh scripts/setup-ssh.sh
+      - sh scripts/install-tofu.sh
       - cd stages/infra
       - tofu init
       - tofu plan -out=tfplan
@@ -63,7 +63,7 @@ steps:
     depends_on:
       - approve-plan
     commands:
-      - sh .woodpecker/scripts/setup-ssh.sh
-      - sh .woodpecker/scripts/install-tofu.sh
+      - sh scripts/setup-ssh.sh
+      - sh scripts/install-tofu.sh
       - cd stages/infra
       - tofu apply tfplan 
