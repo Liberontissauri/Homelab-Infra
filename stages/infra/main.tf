@@ -55,6 +55,11 @@ resource "docker_network" "homelab_network" {
   name = "homelab_internal"
 }
 
+# Fetch the vault network created by the vault stage
+data "docker_network" "vault_network" {
+  name = "vault_network"
+}
+
 # The Global Tunnel
 resource "cloudflare_zero_trust_tunnel_cloudflared" "homelab_tunnel" {
   account_id = var.cloudflare_account_id
@@ -75,6 +80,7 @@ resource "docker_container" "cloudflared" {
   image = "cloudflare/cloudflared:latest"
   restart = "always"
   networks_advanced { name = docker_network.homelab_network.name }
+  networks_advanced { name = data.docker_network.vault_network.name }
   
   log_driver = "json-file"
   log_opts = {
@@ -136,6 +142,17 @@ module "registry" {
     auth_password = var.docker_registry_admin_password
 }
 
+module "vault_tunnel" {
+    source = "../../modules/vault_tunnel"
+    providers = {
+        cloudflare = cloudflare
+    }
+    domain_base           = var.domain_base
+    cloudflare_tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab_tunnel.id
+    cloudflare_zone_id    = var.cloudflare_zone_id
+    vault_network_name    = data.docker_network.vault_network.name
+}
+
 # --- Tunnel Routing Configuration ---
 # Centralized configuration for all services on the tunnel
 
@@ -150,6 +167,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab_routing" {
           module.affine.ingress_rule,
           module.booklore.ingress_rule,
           module.registry.ingress_rule,
+          module.vault_tunnel.ingress_rule,
         ] : {
           hostname = rule.hostname
           service  = rule.service
