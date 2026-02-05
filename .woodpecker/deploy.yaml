@@ -43,7 +43,7 @@ steps:
       - tofu plan -out=tfplan
   
   - name: approve-plan
-    image: registry.liberato.dev/plugin-gatekeeper:latest
+    image: registry.liberato.dev/plugin-gatekeeper:0.1
     depends_on:
       - tofu-plan
     settings:
