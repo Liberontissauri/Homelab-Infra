@@ -47,6 +47,7 @@ steps:
     depends_on:
       - tofu-plan
     settings:
+      debug: true
       driver: github
       server: https://api.github.com
       token:
