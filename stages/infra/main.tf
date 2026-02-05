@@ -136,22 +136,6 @@ module "registry" {
     auth_password = var.docker_registry_admin_password
 }
 
-module "woodpecker" {
-    source = "../../modules/woodpecker"
-    providers = {
-        docker = docker
-        cloudflare = cloudflare
-    }
-    docker_network_name        = docker_network.homelab_network.name
-    domain_base                = var.domain_base
-    cloudflare_zone_id         = var.cloudflare_zone_id
-    cloudflare_tunnel_id       = cloudflare_zero_trust_tunnel_cloudflared.homelab_tunnel.id
-    woodpecker_admin_user      = var.woodpecker_admin_user
-    woodpecker_agent_secret    = var.woodpecker_agent_secret
-    github_client_id           = var.github_client_id
-    github_client_secret       = var.github_client_secret
-}
-
 # --- Tunnel Routing Configuration ---
 # Centralized configuration for all services on the tunnel
 
@@ -166,7 +150,6 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab_routing" {
           module.affine.ingress_rule,
           module.booklore.ingress_rule,
           module.registry.ingress_rule,
-          module.woodpecker.ingress_rule
         ] : {
           hostname = rule.hostname
           service  = rule.service
