@@ -181,24 +181,3 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab_routing" {
     )
   }
 }
-
-# resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab_routing" {
-#   account_id = var.cloudflare_account_id
-#   tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab_tunnel.id
-
-#   config {
-#     for rule in [
-#         module.affine.ingress_rule,
-#         module.booklore.ingress_rule
-#     ] : {
-#         hostname = rule.hostname
-#         service  = rule.service
-#     } + [
-#       {
-#         service = "http_status:404"
-#       }
-#     ]
-#     ]
-#   }
-# }
-
