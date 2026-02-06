@@ -88,6 +88,11 @@ resource "docker_container" "cloudflared" {
     "max-file" = "3"
   }
   
+  host {
+    host = "host"
+    ip   = "host-gateway"
+  }
+  
   command = ["tunnel", "--no-autoupdate", "run", "--token", data.cloudflare_zero_trust_tunnel_cloudflared_token.homelab_tunnel_token.token]
 }
 
@@ -153,6 +158,19 @@ module "vault_tunnel" {
     vault_network_name    = data.docker_network.vault_network.name
 }
 
+module "home_tunnel" {
+    source = "../../modules/home_tunnel"
+    providers = {
+        cloudflare = cloudflare
+    }
+    domain_base           = var.domain_base
+    cloudflare_account_id = var.cloudflare_account_id
+    cloudflare_tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab_tunnel.id
+    cloudflare_zone_id    = var.cloudflare_zone_id
+    access_service_token_name = var.access_service_token_name
+    homelab_ip            = var.homelab_ip
+}
+
 # --- Tunnel Routing Configuration ---
 # Centralized configuration for all services on the tunnel
 
@@ -168,6 +186,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab_routing" {
           module.booklore.ingress_rule,
           module.registry.ingress_rule,
           module.vault_tunnel.ingress_rule,
+          module.home_tunnel.ingress_rule,
         ] : {
           hostname = rule.hostname
           service  = rule.service

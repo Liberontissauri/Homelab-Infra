@@ -1,17 +1,29 @@
+# --- Non Sensitive --- #
+
 variable "homelab_ip" {
   type = string
 }
 variable "vps_ip" {
   type = string
 }
-variable "minio_root_password" {
-  type      = string
-}
+
 variable "tf_state_bucket_name" {
   type    = string
 }
 
-# --- Cloudflare --- #
+variable "domain_base" {
+  type = string
+}
+
+variable "access_service_token_name" {
+  type = string
+}
+
+# --- Sensitive --- #
+
+variable "minio_root_password" {
+  type      = string
+}
 
 variable "cloudflare_api_token" {
   type      = string
@@ -23,10 +35,6 @@ variable "cloudflare_account_id" {
 }
 
 variable "cloudflare_zone_id" {
-  type = string
-}
-
-variable "domain_base" {
   type = string
 }
 
