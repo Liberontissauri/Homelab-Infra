@@ -171,6 +171,18 @@ module "home_tunnel" {
     homelab_ip            = var.homelab_ip
 }
 
+module "minio_tunnel" {
+  source = "../../modules/minio_tunnel"
+  providers = {
+    cloudflare = cloudflare
+  }
+  domain_base           = var.domain_base
+  cloudflare_account_id = var.cloudflare_account_id
+  cloudflare_tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab_tunnel.id
+  cloudflare_zone_id    = var.cloudflare_zone_id
+  access_service_token_name = var.access_service_token_name
+}
+
 # --- Tunnel Routing Configuration ---
 # Centralized configuration for all services on the tunnel
 
@@ -187,6 +199,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab_routing" {
           module.registry.ingress_rule,
           module.vault_tunnel.ingress_rule,
           module.home_tunnel.ingress_rule,
+          module.minio_tunnel.ingress_rule,
         ] : {
           hostname = rule.hostname
           service  = rule.service
