@@ -35,16 +35,17 @@ jobs:
                 url: https://vault.liberato.dev
                 method: jwt
                 role: github-actions-role # The role name configured in Vault
+                path: infra
                 secrets: |
-                    infra/cf_crendentials account_id | TF_VAR_cloudflare_account_id ;
-                    infra/cf_crendentials api_token | TF_VAR_cloudflare_api_token ;
-                    infra/cf_domain_zone_id zone_id | TF_VAR_cloudflare_zone_id ;
-                    infra/docker_registry_admin_password password | TF_VAR_docker_registry_admin_password ;
-                    infra/infra_private_ssh_key key | SSH_KEY ;
-                    infra/minio_password password | TF_VAR_minio_root_password ;
-                    infra/ssh_service_token token | TF_VAR_access_service_token ;
-                    infra/cf_service_token id | TOKEN_ID ;
-                    infra/cf_service_token secret | TOKEN_SECRET ;
+                    infra/data/cf_crendentials account_id | TF_VAR_cloudflare_account_id ;
+                    infra/data/cf_crendentials api_token | TF_VAR_cloudflare_api_token ;
+                    infra/data/cf_domain_zone_id zone_id | TF_VAR_cloudflare_zone_id ;
+                    infra/data/docker_registry_admin_password password | TF_VAR_docker_registry_admin_password ;
+                    infra/data/infra_private_ssh_key key | SSH_KEY ;
+                    infra/data/minio_password password | TF_VAR_minio_root_password ;
+                    infra/data/ssh_service_token token | TF_VAR_access_service_token ;
+                    infra/data/cf_service_token id | TOKEN_ID ;
+                    infra/data/cf_service_token secret | TOKEN_SECRET ;
 
             - name: Establish Cloudflared Tunnel to Homelab
               run: |
