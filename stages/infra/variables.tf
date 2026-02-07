@@ -3,7 +3,15 @@
 variable "homelab_ip" {
   type = string
 }
+variable "ssh_port_homelab" {
+  type = string
+}
+
 variable "vps_ip" {
+  type = string
+}
+
+variable "ssh_port_vps" {
   type = string
 }
 

@@ -34,12 +34,12 @@ terraform {
 }
 
 provider "docker" {
-  host = "ssh://root@${var.homelab_ip}:22"
+  host = "ssh://root@${var.homelab_ip}:${var.ssh_port_homelab}"
 }
 
 provider "docker" {
   alias = "vps"
-  host  = "ssh://root@${var.vps_ip}:22"
+  host  = "ssh://root@${var.vps_ip}:${var.ssh_port_vps}"
 }
 
 provider "cloudflare" {

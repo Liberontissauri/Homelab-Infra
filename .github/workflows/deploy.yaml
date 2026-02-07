@@ -8,6 +8,8 @@ env:
   TF_VAR_vps_ip: 46.224.228.205
   TF_VAR_access_service_token_name: infra-direct-access
   TF_VAR_state_bucket_name: tf-state-bucket
+  TF_VAR_ssh_port_homelab: 2222
+  TF_VAR_ssh_port_vps: 22
 
 
 jobs:
@@ -51,7 +53,7 @@ jobs:
               run: |
                 cloudflared access tcp \
                   --hostname home.liberato.dev \
-                  --url localhost:22 \
+                  --url localhost:2222 \
                   --service-token-secret $TOKEN_SECRET \
                   --service-token-id $TOKEN_ID &
                 cloudflared access tcp \
