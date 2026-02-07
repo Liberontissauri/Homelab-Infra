@@ -54,6 +54,11 @@ jobs:
                   --url localhost:22 \
                   --service-token-secret $TOKEN_SECRET \
                   --service-token-id $TOKEN_ID &
+                cloudflared access tcp \
+                  --hostname minio.liberato.dev \
+                  --url localhost:9000 \
+                  --service-token-secret $TOKEN_SECRET \
+                  --service-token-id $TOKEN_ID &
                 sleep 5
             
             - name: Initialize OpenTofu
