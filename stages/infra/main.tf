@@ -1,21 +1,6 @@
 terraform {
     backend "s3" {
-        bucket = var.tf_state_bucket_name
-        key    = "homelab/terraform.tfstate"
-        
-        endpoints = {
-            s3 = "http://${var.homelab_ip}:9000"
-        }
-        
-        region = "main"
-        skip_credentials_validation = true
-        skip_requesting_account_id = true
-        skip_metadata_api_check = true
-        skip_region_validation = true
-        use_path_style = true
-        access_key = "admin"
-        secret_key = "${var.minio_root_password}"
-        use_lockfile = true
+        # Configured via backend-config flags in CI/CD
     }
 
     required_providers {

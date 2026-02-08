@@ -46,6 +46,27 @@ tofu init
 tofu apply
 ```
 
+## Backend Configuration
+
+The infrastructure stage uses MinIO (S3-compatible storage) for remote state management. The backend is configured using a partial backend configuration approach:
+
+- **`stages/infra/backend-config.hcl`**: Contains static S3 configuration (bucket, key, region, access credentials)
+- **Environment variables**: Dynamic values are injected via the deployment workflow
+
+The `tofu init` command combines these configurations:
+```bash
+tofu init \
+  -backend-config=backend-config.hcl \
+  -backend-config="endpoints={s3=\"http://$TF_VAR_homelab_ip:9000\"}" \
+  -backend-config="secret_key=$TF_VAR_minio_root_password"
+```
+
+This approach:
+- Keeps static config in version control
+- Prevents hardcoding credentials or environment-specific values
+- Supports multiple environments easily
+- Works seamlessly with CI/CD workflows
+
 ## OpenBao (Vault) Management
 
 ### Unseal OpenBao (required after restarts)

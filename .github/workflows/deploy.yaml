@@ -65,7 +65,11 @@ jobs:
             
             - name: Initialize OpenTofu
               working-directory: stages/infra
-              run: tofu init
+              run: |
+                tofu init \
+                  -backend-config=backend-config.hcl \
+                  -backend-config="endpoints={s3=\"http://$TF_VAR_homelab_ip:9000\"}" \
+                  -backend-config="secret_key=$TF_VAR_minio_root_password"
 
             - name: Apply OpenTofu configuration
               working-directory: stages/infra
